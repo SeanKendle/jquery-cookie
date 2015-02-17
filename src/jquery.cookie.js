@@ -63,10 +63,17 @@
 				var days = options.expires, t = options.expires = new Date();
 				t.setTime(+t + days * 864e+5);
 			}
+			
+			//expiresHours added by Sean Kendle - 17 Feb, 2015
+			if (typeof options.expiresHours === 'number') {
+				var hours = options.expiresHours, t = options.expiresHours = new Date();
+				t.setHours(t.getHours() + hours);
+			}
 
 			return (document.cookie = [
 				encode(key), '=', stringifyCookieValue(value),
-				options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
+				options.expires ? '; expires=' + options.expires.toUTCString() :  // use expires attribute, max-age is not supported by IE
+				(options.expiresHours ? '; expires=' + options.expiresHours.toUTCString() : ''), // expiresHours available if `expires` not set
 				options.path    ? '; path=' + options.path : '',
 				options.domain  ? '; domain=' + options.domain : '',
 				options.secure  ? '; secure' : ''
